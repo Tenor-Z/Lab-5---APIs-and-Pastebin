@@ -1,42 +1,40 @@
 import requests
 
-pokeapi_url = "https://pokeapi.co/api/v2/pokemon/"
-#search_url = f'{pokeapi_url}/{pokemon}'
+poke_api_URL = 'https://pokeapi.co/'
 
-def main():
-    pokesearch = get_pokemon("cinderace","abilities")
 
-def get_pokemon(pokemon, search_term, page=1, limit=20):
-    search_url = f'{pokeapi_url}/{pokemon}'
-    poke = str(pokemon)
-    poke.strip()
-    poke.lower()
+def main():  
+    pokemon = get_pokemon("cinderace")
+    print(pokemon) 
+    
+        
+def get_pokemon(search_term):
 
-    param = {
-        "entity": pokemon,
-        "name": pokemon,
-        "page": page,
-        "limit": limit,
-        "term": search_term
+    poke_Search_URL = f'https://pokeapi.co/api/v2/pokemon/{search_term}'
+
+
+    header_params = {
+        'Accept': 'application/json',
+        'entity': 'pokemon',
     }
 
-    print("Getting info about the Pokemon...", end='')
-    resp_msg = requests.post(search_url, data=param)
+    print(f'Grabbing info about {search_term}...',  end=' ')
+    resp_msg = requests.get(poke_Search_URL, headers=header_params)
+    
 
     if resp_msg.ok:
         print('Success!!')
-        print(f'URL of new paste: {resp_msg.text}')
-        return resp_msg.text
-    elif resp_msg.status_code == 422:
-        print("Error!")
-        print("Maximum pastes reached for 24 hours.")
+        body_dict = resp_msg.json()
+        poke_list = [ability['ability']['name']for ability in body_dict['abilities']]
+        return poke_list
+
     else:
-        print("Error")
-        print(f"Response code {resp_msg.status_code} ({resp_msg.reason})")
-        print(f"Error: {resp_msg.content}")
-        return None
+        print('Failure')
+        print(f'{resp_msg.status_code} ({resp_msg.reason})')
+        print(f'Error: {resp_msg.text}')
+    return None
 
-    return
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main()

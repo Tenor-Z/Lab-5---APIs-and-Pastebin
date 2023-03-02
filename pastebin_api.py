@@ -1,11 +1,11 @@
-import requests
+import requests             #We need requests to make... well.. requests to the pastebin api
 
 
-post_url = "https://pastebin.com/api/api_post.php"
+post_url = "https://pastebin.com/api/api_post.php"             #Here is the PHP website that is responsible for posting generated posts
 dev_key = "70185b642e40e7c757c6e47cdf9b1df4"
 
 def main():
-    post_new_paste('Some text to paste or something','Lol')
+    post_new_paste('Some text to paste or something','Lol')     #If no data is entered, it will default to this placeholder text
 
 def post_new_paste(title, body_text, expiration = '10M', islisted = True):
     """Creates a new PasteBin file
@@ -32,7 +32,7 @@ def post_new_paste(title, body_text, expiration = '10M', islisted = True):
 
     if resp_msg.ok:
         print('Success!!')
-        print(f'URL of new paste: {resp_msg.text}')
+        #print(f'URL of new paste: {resp_msg.text}')
         return resp_msg.text
     elif resp_msg.status_code == 422:
         print("Error!")
